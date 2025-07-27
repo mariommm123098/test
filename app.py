@@ -16,6 +16,7 @@ RESULT_HTML = """
 <h2>DeepSeek 给出的解答与思路</h2>
 <pre style="white-space: pre-wrap;">{{ deepseek_answer }}</pre>
 """
+load_dotenv()  # Automatically read .env before using os.getenv
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False  # ensure JSON responses keep Unicode
@@ -26,9 +27,6 @@ DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
 client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
 MODEL_NAME = "deepseek-chat"
 
-# Load example dataset
-with open('sample_dataset.json', 'r') as f:
-    DATASET = json.load(f)
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -76,14 +74,20 @@ def upload():
         ocr_text=text.strip(),
         deepseek_answer=deepseek_answer
     )
+    return jsonify({
+        'ocr_text': text.strip(),
+        'deepseek_answer': deepseek_answer
+    ai_answer = resp.choices[0].message.content.strip()
 
+    # Search dataset for an example match
+    match = search_dataset(text)
 
-def search_dataset(text):
-    text_lower = text.lower()
-    for item in DATASET:
-        if item['question'].lower() in text_lower:
-            return item
-    return {'message': 'No match found in dataset'}
+    return jsonify({
+        'ocr_text': text.strip(),
+        'ai_answer': ai_answer,
+        'match': match
+    })
+
 
 
 if __name__ == '__main__':
