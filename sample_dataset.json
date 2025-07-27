@@ -1,0 +1,14 @@
+[
+  {
+    "question": "What is the derivative of x^2?",
+    "solution": "The derivative of x^2 with respect to x is 2x.",
+    "syllabus": "Calculus -> Differentiation",
+    "textbook_reference": "Chapter 3, Section 2"
+  },
+  {
+    "question": "Solve the equation x^2 - 4 = 0",
+    "solution": "The solutions are x = -2 and x = 2.",
+    "syllabus": "Algebra -> Quadratic Equations",
+    "textbook_reference": "Chapter 2, Section 1"
+  }
+]
