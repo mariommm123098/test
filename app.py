@@ -5,7 +5,6 @@ from flask import Flask, request, jsonify, render_template_string
 import pytesseract
 from PIL import Image
 from openai import OpenAI
-
 load_dotenv()  # Automatically read .env before using os.getenv
 
 app = Flask(__name__)
@@ -65,6 +64,16 @@ def upload():
     return jsonify({
         'ocr_text': text.strip(),
         'deepseek_answer': deepseek_answer
+=======
+    ai_answer = resp.choices[0].message.content.strip()
+
+    # Search dataset for an example match
+    match = search_dataset(text)
+
+    return jsonify({
+        'ocr_text': text.strip(),
+        'ai_answer': ai_answer,
+        'match': match
     })
 
 
