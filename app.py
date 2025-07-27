@@ -78,7 +78,7 @@ def upload():
         'ocr_text': text.strip(),
         'deepseek_answer': deepseek_answer
     ai_answer = resp.choices[0].message.content.strip()
-
+             })
     # Search dataset for an example match
     match = search_dataset(text)
 
