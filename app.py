@@ -1,9 +1,12 @@
 import json
 import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template_string
 import pytesseract
 from PIL import Image
 from openai import OpenAI
+
+load_dotenv()  # Automatically read .env before using os.getenv
 
 app = Flask(__name__)
 
