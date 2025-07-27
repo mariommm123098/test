@@ -3,8 +3,15 @@ import os
 from flask import Flask, request, jsonify, render_template_string
 import pytesseract
 from PIL import Image
+from openai import OpenAI
 
 app = Flask(__name__)
+
+# Configure DeepSeek API client
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=DEEPSEEK_BASE_URL)
+MODEL_NAME = "deepseek-chat"
 
 # Load example dataset
 with open('sample_dataset.json', 'r') as f:
@@ -39,11 +46,24 @@ def upload():
     # Perform OCR
     text = pytesseract.image_to_string(Image.open(filepath))
 
+    # Call DeepSeek for an AI-generated solution
+    messages = [
+        {"role": "system", "content": "You are an expert A-Level tutor."},
+        {"role": "user", "content": f"请针对这道题目给出答案和详细解题思路：\n{text}"}
+    ]
+    resp = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=messages,
+        stream=False
+    )
+    ai_answer = resp.choices[0].message.content.strip()
+
     # Search dataset for an example match
     match = search_dataset(text)
 
     return jsonify({
         'ocr_text': text.strip(),
+        'ai_answer': ai_answer,
         'match': match
     })
 

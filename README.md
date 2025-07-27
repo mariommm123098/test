@@ -17,6 +17,13 @@ Install Python dependencies:
 pip install -r requirements.txt
 ```
 
+Set the DeepSeek API credentials as environment variables before running the server:
+
+```bash
+export DEEPSEEK_API_KEY=<your_key>
+export DEEPSEEK_BASE_URL=https://api.deepseek.com  # optional
+```
+
 ## Running the App
 
 ```bash
