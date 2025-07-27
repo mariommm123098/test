@@ -10,7 +10,6 @@ load_dotenv()  # Automatically read .env before using os.getenv
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False  # ensure JSON responses keep Unicode
 
-
 # Configure DeepSeek API client
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
@@ -60,6 +59,12 @@ def upload():
         messages=messages,
         stream=False
     )
+    deepseek_answer = resp.choices[0].message.content.strip()
+
+    return jsonify({
+        'ocr_text': text.strip(),
+        'deepseek_answer': deepseek_answer
+=======
     ai_answer = resp.choices[0].message.content.strip()
 
     # Search dataset for an example match
