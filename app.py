@@ -1,11 +1,15 @@
 import json
 import os
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template_string
 import pytesseract
 from PIL import Image
 from openai import OpenAI
+load_dotenv()  # Automatically read .env before using os.getenv
 
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False  # ensure JSON responses keep Unicode
+
 
 # Configure DeepSeek API client
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
